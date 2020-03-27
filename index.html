@@ -1,0 +1,205 @@
+<html>
+<head>
+	<title>RGB/Slider</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+	
+	<style>
+		#colSample {
+			width: 100%;
+			height: 50px;
+			border: 1px solid black;
+			background-color: #808080;
+		}
+		.btn{
+			width: 200px;
+			padding: 15px 32px;
+			text-align: center;
+			border: 2px solid black;
+		}
+		.slidecontainer {
+			width: 100%;
+		}
+		
+		.sliderR {
+			-webkit-appearance: none;
+			width: 100%;
+			height: 15px;
+			border-radius: 5px;
+			background: #d3d3d3;
+			outline: none;
+			opacity: 0.7;
+			-webkit-transition: .2s;
+			transition: opacity .2s;
+		}
+		
+		.sliderR:hover {
+			opacity: 1;
+		}
+		
+		.sliderR::-webkit-slider-thumb {
+			-webkit-appearance: none;
+			appearance: none;
+			width: 25px;
+			height: 25px;
+			border-radius: 50%;
+			background: #FF0000;
+			cursor: pointer;
+		}
+		
+		.sliderR::-moz-range-thumb {
+			width: 25px;
+			height: 25px;
+			border-radius: 50%;
+			background: #FF0000;
+			cursor: pointer;
+		}
+
+		.sliderG {
+			-webkit-appearance: none;
+			width: 100%;
+			height: 15px;
+			border-radius: 5px;
+			background: #d3d3d3;
+			outline: none;
+			opacity: 0.7;
+			-webkit-transition: .2s;
+			transition: opacity .2s;
+		}
+		
+		.sliderG:hover {
+			opacity: 1;
+		}
+		
+		.sliderG::-webkit-slider-thumb {
+			-webkit-appearance: none;
+			appearance: none;
+			width: 25px;
+			height: 25px;
+			border-radius: 50%;
+			background: #00FF00;
+			cursor: pointer;
+		}
+		
+		.sliderG::-moz-range-thumb {
+			width: 25px;
+			height: 25px;
+			border-radius: 50%;
+			background: #00FF00;
+			cursor: pointer;
+		}
+
+		.sliderB {
+			-webkit-appearance: none;
+			width: 100%;
+			height: 15px;
+			border-radius: 5px;
+			background: #d3d3d3;
+			outline: none;
+			opacity: 0.7;
+			-webkit-transition: .2s;
+			transition: opacity .2s;
+		}
+		
+		.sliderB:hover {
+			opacity: 1;
+		}
+		
+		.sliderB::-webkit-slider-thumb {
+			-webkit-appearance: none;
+			appearance: none;
+			width: 25px;
+			height: 25px;
+			border-radius: 50%;
+			background: #0000FF;
+			cursor: pointer;
+		}
+		
+		.sliderB::-moz-range-thumb {
+			width: 25px;
+			height: 25px;
+			border-radius: 50%;
+			background: #0000FF;
+			cursor: pointer;
+		}
+
+	</style>
+	
+	
+</head>
+<body>
+   <div class="container theme-showcase" role="main">
+		<div class="jumbotron">
+        	<h2>RGB Led controled by sliders</h1>
+        	<p>The RGB led connected tu an arduino board. The color can be set with the sliders</p>
+		</div>
+		<div class="row">
+			<div class="slidecontainer">
+				<input type="range" min="0" max="255" value="128" class="sliderR" id="colorRojo">
+				<p>Red: <span id="valorRojo"></span></p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="slidecontainer">
+				<input type="range" min="0" max="255" value="128" class="sliderG" id="colorVerde">
+				<p>Green: <span id="valorVerde"></span></p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="slidecontainer">
+				<input type="range" min="0" max="255" value="128" class="sliderB" id="colorAzul">
+				<p>Blue: <span id="valorAzul"></span></p>
+			</div>
+		</div>
+		<div class="row">
+			<p>RGB Led Color: <span id="rgbLedColor"></span></p>
+		</div>
+		<div class="row">
+			<div id=colSample></div>
+		</div>		  
+	</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+<script>
+
+    var valorRojo = 128; var valorVerde = 128; var valorAzul = 128;
+    var valorRGB = '#808080';
+    var socket = io();
+
+    $(document).ready(function(){});
+
+    $(document).on('input  change', '#colorRojo', function(){
+        $('#valorRojo').html($(this).val());
+        valorRojo=$(this).val();
+        updateColor(valorRojo, valorVerde, valorAzul);
+    });
+    $(document).on('input  change', '#colorVerde', function(){
+        $('#valorVerde').html($(this).val());
+        valorVerde=$(this).val();
+        updateColor(valorRojo, valorVerde, valorAzul);
+    });
+    $(document).on('input  change', '#colorAzul', function(){
+        $('#valorAzul').html($(this).val());
+        valorAzul=$(this).val();
+        updateColor(valorRojo, valorVerde, valorAzul);
+    });
+
+	function updateColor(vR, vG, vB){
+		var hexR = Number(vR).toString(16);
+		var hexG = Number(vG).toString(16);
+		var hexB = Number(vB).toString(16);
+		var ledColor = "#808080";
+		if (hexR.length <2){hexR = "0" + hexR;}
+		if (hexG.length <2){hexG = "0" + hexG;}
+		if (hexB.length <2){hexB = "0" + hexB;}
+        ledColor= "#" + hexR + hexG + hexB;
+        $('#rgbLedColor').html(ledColor);
+        $('#colSample').css("background-color", ledColor);
+		socket.emit("led rgb", ledColor);
+		console.log(ledColor);
+    }
+    
+</script>
+</body>
+</html>
