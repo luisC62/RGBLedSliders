@@ -48,7 +48,7 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Connection diagram
 
-![Connection Diagram]((arduino_rgbled_node_bb.png)
+![Connection Diagram](arduino_rgbled_node_bb.png)
 
 This diagram has been made with [Fritzing].
 
